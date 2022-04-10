@@ -25,3 +25,22 @@ fetch(url)
     .catch(function(error){
         console.log(error);
     })
+
+majSitckersPanier();
+
+// Affichage sticker quantité panier
+function majSitckersPanier(){
+    let stickersPanier = document.getElementById("checkout_items");
+    let panierProduits = JSON.parse(localStorage.getItem("produitsChoisis"));
+    if(!panierProduits || panierProduits.length==0){
+        stickersPanier.style.display = "none";
+    }
+    else{
+        stickersPanier.style.display = "flex";
+        let qtepanier=0; 
+        for (const produit of panierProduits) {
+            qtepanier = qtepanier + parseInt(produit.qte);
+        }
+        stickersPanier.innerHTML = qtepanier;
+    }
+}

@@ -1,3 +1,4 @@
+
 //recupérer id d'un produit depuis l'url
 const textUrl = window.location.search;
 console.log(textUrl);
@@ -17,4 +18,97 @@ fetch(url)
         document.getElementById("description").innerHTML = product.description;
         document.getElementById("price").innerHTML = product.price;
         document.getElementById("product-img").innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
-    })
+        document.getElementById('quantity').value = 1;
+        console.log(product.colors);
+        for(let color of product.colors){
+            console.log(color);
+            document.getElementById("colors").insertAdjacentHTML(
+                "afterbegin",
+                `<option value="${color}">${color}</option>`
+            )
+        };
+
+    });
+
+function formatMonetaire(prix){
+    const prixFormate = parseFloat(prix).toFixed(2);
+    return prixFormate;
+}
+
+//le clic du bouton "ajouter au panier"
+function addToCart() {
+    
+    let panier = JSON.parse(localStorage.getItem("produitsChoisis"));
+    if (!panier){panier=[]};
+
+    // récupération de l'ID
+    const textUrl = window.location.search;
+    const objetParamsUrl = new URLSearchParams(textUrl);
+    const productId = objetParamsUrl.get("id");
+    console.log(productId);
+
+    const nomProduit = document.getElementById("title").textContent;
+    const price = document.getElementById("price").textContent;
+    const quantite = document.getElementById("quantity").value;
+    const color = document.getElementById("colors").value;
+    const imageUrl = document.getElementById("product-img").firstChild.getAttribute("src");
+    const altImg = document.getElementById("product-img").firstChild.getAttribute("alt");
+
+    if(!color) {
+        alert('Veuillez choisir une couleur');
+    }
+    else if (quantite < 1 ){
+        alert('La quantité ne peut être inférieur à 1')
+    }
+    else{
+        
+        let produitChoisi = {id:productId, nom:nomProduit, prix:price, qte:quantite, color:color, imgUrl:imageUrl, altTxt:altImg};
+        let produitExistant = panier.find(produit=>(produit.id==produitChoisi.id && produit.color==produitChoisi.color));        
+        
+        if(!produitExistant){
+            panier.push(produitChoisi);
+        }
+        else{produitExistant.qte=parseInt(produitExistant.qte)+parseInt(produitChoisi.qte);
+            let panierFiltre = panier.filter(produit=>(produit.id!=produitExistant.id && produit.color!=produitExistant.color));
+            panierFiltre.push(produitExistant);
+            panier=panierFiltre;
+        }
+    
+        let formatTextProduitChoisi = JSON.stringify(panier);    
+        //stocker dans le stockage local
+        localStorage.setItem("produitsChoisis",formatTextProduitChoisi);
+
+        //redirection vers panier ou continuer achat
+        let redirection = confirm("Votre produit a été ajouté au panier, voulez-vous valider votre panier?");
+        if(redirection){
+            window.location.href = "cart.html";
+        }
+
+        majSitckersPanier();
+        
+    }
+    
+    
+} 
+majSitckersPanier();
+
+
+// Affichage sticker quantité panier
+function majSitckersPanier(){
+    let stickersPanier = document.getElementById("checkout_items");
+    let panierProduits = JSON.parse(localStorage.getItem("produitsChoisis"));
+    if(!panierProduits || panierProduits.length==0){
+        stickersPanier.style.display = "none";
+    }
+    else{
+        stickersPanier.style.display = "flex";
+        let qtepanier=0; 
+        for (const produit of panierProduits) {
+            qtepanier = qtepanier + parseInt(produit.qte);
+        }
+        stickersPanier.innerHTML = qtepanier;
+    }
+}
+
+
+

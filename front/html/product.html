@@ -34,7 +34,10 @@
           <nav>
             <ul>
               <a href="./index.html"><li>Accueil</li></a>
-              <a href="./cart.html"><li>Panier</li></a>
+              <a href="./cart.html">
+                <li>Panier</li>
+                <span id="checkout_items" class="checkout_items">0</span>
+              </a>
             </ul>
           </nav>
         </div>
@@ -46,7 +49,7 @@
       <div class="limitedWidthBlock">
         <section class="item">
           <article>
-            <div class="item__img" id='product-img'>
+            <div class="item__img" id="product-img">
               <!-- <img src="../images/logo.png" alt="Photographie d'un canapé"> -->
             </div>
             <div class="item__content">
@@ -78,7 +81,7 @@
               </div>
 
               <div class="item__content__addButton">
-                <button id="addToCart">Ajouter au panier</button>
+                <button id="addToCart" onclick="addToCart()">Ajouter au panier</button>
               </div>
 
             </div>

@@ -34,7 +34,10 @@
           <nav>
             <ul>
               <a href="./index.html"><li>Accueil</li></a>
-              <a href="./cart.html"><li>Panier</li></a>
+              <a href="./cart.html">
+                <li>Panier</li>
+                <span id="checkout_items" class="checkout_items">0</span>
+              </a>
             </ul>
           </nav>
         </div>
@@ -101,7 +104,7 @@
                   <p id="emailErrorMsg"></p>
                 </div>
                 <div class="cart__order__form__submit">
-                  <input type="submit" value="Commander !" id="order">
+                  <input onclick="validerCommande()" value="Commander !" id="order">
                 </div>
               </form>
             </div>
