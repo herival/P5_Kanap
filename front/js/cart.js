@@ -25,16 +25,14 @@ function affichagePanier() {
                     <p class="color">${produit.color}</p>
                     <p>${formatMonetaire(produit.prix)}€</p>
                 </div>
-                <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings" id="${produit.id}-${produit.color}">
                 <div class="cart__item__content__settings__quantity">
                 <p>Qté : </p>
                 <input id="${produit.id}"
                 type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${produit.qte}">
                     </div>
                     <div class="cart__item__content__settings__delete">
-                    <p onclick="supprimerProduit('${
-                        produit.id
-                    }','${produit.color}')" class="deleteItem">Supprimer</p>
+                    <p class="deleteItem">Supprimer</p>
                     </div>
                 </div>
                 </div>
@@ -49,29 +47,42 @@ function formatMonetaire(prix) {
     const prixFormate = parseFloat(prix).toFixed(2);
     return prixFormate;
 }
-function supprimerProduit(idDelete,colorDelete) {
-    
-    
-    let confirmDelete = confirm('Etes-vous sur de vouloir retirer ce produit?');
-    if (confirmDelete){
-        let panierFiltre = panierProduits.filter(checkProduct);
-        let formatTextProduitChoisi = JSON.stringify(panierFiltre);
-        localStorage.setItem("produitsChoisis", formatTextProduitChoisi);
-        document.getElementById("cart__items").innerHTML = "";
-    
-        panierProduits = panierFiltre;
-        affichagePanier();
-        function checkProduct(produit) {
-            return ((produit.id != idDelete)||(produit.color !=colorDelete));
-        }
-        majSitckersPanier();
 
+
+function supprimerProduit() {
+    const supprimer = document.getElementsByClassName('deleteItem');
+    
+    for(let i=0; i<supprimer.length; i++){
+        supprimer[i].addEventListener("click", function(e){
+            let productDelete = supprimer[i].closest('.cart__item__content__settings').id;
+            let arrayProductDelete = productDelete.split("-");
+            let productDeleteId = arrayProductDelete[0];
+            let productDeleteColor = arrayProductDelete[1];
+            console.log(arrayProductDelete[0]);
+
+            let panierFiltre = panierProduits.filter(checkProduct);
+
+            let formatTextProduitChoisi = JSON.stringify(panierFiltre);
+            localStorage.setItem("produitsChoisis", formatTextProduitChoisi);
+            document.getElementById("cart__items").innerHTML = "";
+        
+            panierProduits = panierFiltre;
+            affichagePanier();
+
+            function checkProduct(produit) {
+                return ((produit.id != productDeleteId)||(produit.color !=productDeleteColor));
+            }
+            location.reload();
+
+
+        });
     }
 
 }
+supprimerProduit();
 
 
-
+// modifier quantité d'article dans le panier
 function changerQte() {
     inputQt = document.querySelectorAll(".itemQuantity");
     classColor = document.getElementsByClassName('color');
@@ -88,9 +99,7 @@ function changerQte() {
                     comp.qte = newQuantity;
                     localStorage.setItem("produitsChoisis", JSON.stringify(panierProduits));
                 }
-
-
-                console.log(comp.qte);
+                // console.log(comp.qte);
             });
             let prixTotal = 0;
             let qteTotale = 0;
@@ -101,9 +110,6 @@ function changerQte() {
             document.getElementById("totalPrice").innerText = formatMonetaire(prixTotal);
             document.getElementById("totalQuantity").innerText = qteTotale;
 
-
-
-
         });
     }
 
@@ -112,6 +118,7 @@ function changerQte() {
 
 changerQte();
 
+// controle validation formulaire
 function formulaireValide() {
     const regexName = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
     const regexAddress = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/;
@@ -205,13 +212,16 @@ function validerCommande() {
             console.log("response back end");
             console.log(response);
             if (response.ok == true) {
-                alert ("Votre Commande reçu avec succés!");
+                alert ("Votre Commande est reçu avec succés!");
                 //console.log(json);
-                localStorage.removeItem("produitsChoisis"); //suppression du panier dans le local storage
+
+                //vider le panier dans le localStorage
+                localStorage.removeItem("produitsChoisis"); 
+
                 response.json().then((informationsData) => {
                     window.location.replace(
                         `confirmation.html?ic=${informationsData.orderId}`
-                    ); //ouvrir une page avec js
+                    );
                 });
                 return;
             } else {
@@ -241,3 +251,5 @@ function majSitckersPanier(){
         stickersPanier.innerHTML = qtepanier;
     }
 }
+
+
