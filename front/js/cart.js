@@ -51,13 +51,12 @@ function formatMonetaire(prix) {
 }
 function supprimerProduit(idDelete,colorDelete) {
     
+    
     let confirmDelete = confirm('Etes-vous sur de vouloir retirer ce produit?');
     if (confirmDelete){
         let panierFiltre = panierProduits.filter(checkProduct);
-        //console.log("panier filtre");
-        //console.log(panierFiltre);
         let formatTextProduitChoisi = JSON.stringify(panierFiltre);
-        localStorage.setItem("produitsChoisis", formatTextProduitChoisi); //stocker dans le stockage local
+        localStorage.setItem("produitsChoisis", formatTextProduitChoisi);
         document.getElementById("cart__items").innerHTML = "";
     
         panierProduits = panierFiltre;
@@ -115,9 +114,9 @@ changerQte();
 
 function formulaireValide() {
     const regexName = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
-    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const regexAddress = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/;
     const regexCity = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
+    const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     const prenom = document.getElementById("firstName").value;
     if (prenom === "") {
@@ -221,7 +220,7 @@ function validerCommande() {
             }
         })
         .catch((error) => {
-            console.log("Erreur!");
+            console.log(error);
         });
 }
 
