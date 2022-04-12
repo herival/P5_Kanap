@@ -39,6 +39,10 @@ function affichagePanier() {
             </article>`
         );
     }
+    if(!panierProduits || panierProduits.length==0){
+        document.getElementById('title-cart').innerHTML = 'Votre panier est vide';
+        // console.log(title)
+    }
     document.getElementById("totalPrice").innerText =
         formatMonetaire(prixTotal);
     document.getElementById("totalQuantity").innerText = qteTotale;
@@ -195,7 +199,7 @@ function validerCommande() {
         city: ville,
         email: email,
     };
-    console.log("formulaire");
+    // console.log("formulaire");
 
     const order = {
         contact: infos,
@@ -212,16 +216,14 @@ function validerCommande() {
             console.log("response back end");
             console.log(response);
             if (response.ok == true) {
-                alert ("Votre Commande est reçu avec succés!");
+                alert ("Votre Commande est reçu avec succès!");
                 //console.log(json);
 
                 //vider le panier dans le localStorage
                 localStorage.removeItem("produitsChoisis"); 
 
                 response.json().then((informationsData) => {
-                    window.location.replace(
-                        `confirmation.html?ic=${informationsData.orderId}`
-                    );
+                    window.location.replace(`confirmation.html?ic=${informationsData.orderId}`);
                 });
                 return;
             } else {

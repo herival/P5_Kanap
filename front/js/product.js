@@ -69,7 +69,7 @@ function addToCart() {
             panier.push(produitChoisi);
         }
         else{produitExistant.qte=parseInt(produitExistant.qte)+parseInt(produitChoisi.qte);
-            let panierFiltre = panier.filter(produit=>(produit.id!=produitExistant.id && produit.color!=produitExistant.color));
+            let panierFiltre = paniefr.filter(produit=>(produit.id!=produitExistant.id && produit.color!=produitExistant.color));
             panierFiltre.push(produitExistant);
             panier=panierFiltre;
         }
@@ -79,10 +79,8 @@ function addToCart() {
         localStorage.setItem("produitsChoisis",formatTextProduitChoisi);
 
         //redirection vers panier ou continuer achat
-        let redirection = confirm("Votre produit a été ajouté au panier, voulez-vous valider votre panier?");
-        if(redirection){
-            window.location.href = "cart.html";
-        }
+        alert("Votre produit a été ajouté au panier");
+
 
         majSitckersPanier();
         
