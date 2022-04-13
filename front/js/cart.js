@@ -174,8 +174,8 @@ function validerCommande() {
     let errorMsg = formulaireValide();
     if (errorMsg !== null) {
         let cart = document.querySelectorAll('.cart__order p');
-        cart.forEach(element => {
-            element.innerHTML ="";
+        cart.forEach(p => {
+            p.innerHTML ="";
         });
         document.getElementById(errorMsg[0]).innerHTML = errorMsg[1];
         return; 
