@@ -117,51 +117,52 @@ function formulaireValide() {
     const regexAddress = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/;
     const regexCity = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+    let errorMsg = null; 
     const prenom = document.getElementById("firstName").value;
     if (prenom === "") {
-        alert("Veuillez renseigner votre prénom");
-        return false;
+        errorMsg = ["firstNameErrorMsg", "Veuillez renseigner votre prénom"]; 
+        return errorMsg;
+
     }
     if (!regexName.test(prenom)) {
-        alert("veuillez introduire un prénom valide");
-        return false;
+        errorMsg = ["firstNameErrorMsg", "Veuillez renseigner un prénom valide"]; 
+        return errorMsg;
     }
     const nom = document.getElementById("lastName").value;
     if (nom === "") {
-        alert("Veuillez renseigner votre nom");
-        return false;
+        errorMsg = ["lastNameErrorMsg", "Veuillez renseigner votre nom"]; 
+        return errorMsg;
     }
     if (!regexName.test(nom)) {
-        alert("veuillez introduire un nom valide");
-        return false;
+        errorMsg = ["lastNameErrorMsg", "Veuillez renseigner un nom valide"]; 
+        return errorMsg;
     }
     const adresse = document.getElementById("address").value;
     if (adresse === ""){
-        alert("Veuillez renseigner une adresse");
-        return false;
+        errorMsg = ["addressErrorMsg", "Veuillez renseigner une adresse"]; 
+        return errorMsg;
     };
     if (!regexAddress.test(adresse)){
-        alert ("veuillez introduire une adresse valide");
-        return false;  
+        errorMsg = ["addressErrorMsg", "Veuillez renseigner une adresse valide"]; 
+        return errorMsg;
     }
     const ville = document.getElementById("city").value;
     if (ville === ""){
-        alert("Veuillez renseigner la ville");
-        return false;
+        errorMsg = ["cityErrorMsg", "Veuillez renseigner la ville"]; 
+        return errorMsg;
     };
     if (!regexCity.test(ville)){
-        alert ("veuillez introduire un nom de ville valide");
-        return false;  
+        errorMsg = ["cityErrorMsg", "Veuillez renseigner une ville valide"]; 
+        return errorMsg;
     }
     const email = document.getElementById("email").value;
     if (email === ""){
-        alert("Veuillez renseigner une adresse email");
-        return false;
+        errorMsg = ["emailErrorMsg", "Veuillez renseigner une adresse email"]; 
+        return errorMsg;
     };
     if (!regexEmail.test(email)){
-        alert ("veuillez introduire un email valide");
-        return false;  
+        errorMsg = ["emailErrorMsg", "Veuillez renseigner une adresse email valide"]; 
+        return errorMsg; 
     }
 }
 
@@ -169,11 +170,19 @@ function validerCommande() {
     if(panierProduits.length===0){  
         alert ("votre panier est vide");
         return;
+    }    
+    let errorMsg = formulaireValide();
+    if (errorMsg !== null) {
+        let cart = document.querySelectorAll('.cart__order p');
+        cart.forEach(element => {
+            element.innerHTML ="";
+        });
+        document.getElementById(errorMsg[0]).innerHTML = errorMsg[1];
+        return; 
     }
+    console.log(errorMsg[0]);
     
-    if(formulaireValide()=== false){
-        return;
-    }
+
    
     const prenom = document.getElementById("firstName").value;
     const nom = document.getElementById("lastName").value;
