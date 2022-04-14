@@ -78,11 +78,12 @@ function addToCart() {
         //stocker dans le stockage local
         localStorage.setItem("produitsChoisis",formatTextProduitChoisi);
 
+        modal();
         //redirection vers panier ou continuer achat
-        let redirection = confirm("Votre produit a été ajouté au panier, voulez-vous valider votre panier?");
-        if(redirection){
+        let cart_btn = document.getElementById("cart-btn");
+        cart_btn.onclick = function() {
             window.location.href = "cart.html";
-        }
+        }; 
 
         majSitckersPanier();
         
@@ -110,5 +111,18 @@ function majSitckersPanier(){
     }
 }
 
+function modal(){
+    let modal = document.getElementById("myModal");
+    let span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+    }    
+}
 
 

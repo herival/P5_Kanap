@@ -215,28 +215,20 @@ function validerCommande() {
             console.log(response);
             if (response.ok == true) {
                 //suppression du panier dans le local storage
-                localStorage.removeItem("produitsChoisis"); 
+                // localStorage.removeItem("produitsChoisis"); 
 
                 //ouvrir un modal de confirmation
                 let modal = document.getElementById("myModal");
                 let span = document.getElementsByClassName("close")[0];
                 modal.style.display = "block";
                 span.onclick = function() {
-                    // alert ("Votre Commande reçu avec succés!");
-                    //console.log(json);
                     response.json().then((informationsData) => {
-                        window.location.replace(
-                            `confirmation.html?ic=${informationsData.orderId}`
-                        ); //ouvrir une page avec js
+                        //redirection sur la page confirmation
+                        window.location.replace(`confirmation.html?ic=${informationsData.orderId}`); 
                         return;
-                });
+                    })
                 }
-                // window.onclick = function(event) {
-                //     if (event.target == modal) {
-                //       modal.style.display = "none";
-                //     }
-                // }
-
+            
             } else {
                 console.log("Erreur!");
                 return;
@@ -245,10 +237,6 @@ function validerCommande() {
         .catch((error) => {
             console.log(error);
         });
-
-
-
-    
     
 }
 
