@@ -31,7 +31,7 @@ majSitckersPanier();
 // Affichage sticker quantité panier
 function majSitckersPanier(){
     let stickersPanier = document.getElementById("checkout_items");
-    let panierProduits = JSON.parse(localStorage.getItem("produitsChoisis"));
+    let panierProduits = JSON.parse(localStorage.getItem("panier"));
     if(!panierProduits || panierProduits.length==0){
         stickersPanier.style.display = "none";
     }

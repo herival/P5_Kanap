@@ -38,7 +38,7 @@ function formatMonetaire(prix){
 //le clic du bouton "ajouter au panier"
 function addToCart() {
     
-    let panier = JSON.parse(localStorage.getItem("produitsChoisis"));
+    let panier = JSON.parse(localStorage.getItem("panier"));
     if (!panier){panier=[]};
 
     // récupération de l'ID
@@ -76,11 +76,14 @@ function addToCart() {
     
         let formatTextProduitChoisi = JSON.stringify(panier);    
         //stocker dans le stockage local
-        localStorage.setItem("produitsChoisis",formatTextProduitChoisi);
+        localStorage.setItem("panier",formatTextProduitChoisi);
 
+        modal();
         //redirection vers panier ou continuer achat
-        alert("Votre produit a été ajouté au panier");
-
+        let cart_btn = document.getElementById("cart-btn");
+        cart_btn.onclick = function() {
+            window.location.href = "cart.html";
+        }; 
 
         majSitckersPanier();
         
@@ -94,7 +97,7 @@ majSitckersPanier();
 // Affichage sticker quantité panier
 function majSitckersPanier(){
     let stickersPanier = document.getElementById("checkout_items");
-    let panierProduits = JSON.parse(localStorage.getItem("produitsChoisis"));
+    let panierProduits = JSON.parse(localStorage.getItem("panier"));
     if(!panierProduits || panierProduits.length==0){
         stickersPanier.style.display = "none";
     }
@@ -108,5 +111,18 @@ function majSitckersPanier(){
     }
 }
 
+function modal(){
+    let modal = document.getElementById("myModal");
+    let span = document.getElementsByClassName("close")[0];
+    modal.style.display = "block";
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+    }    
+}
 
 

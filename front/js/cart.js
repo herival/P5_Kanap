@@ -1,5 +1,5 @@
 let panierProduits = JSON.parse(
-    localStorage.getItem("produitsChoisis") || "[]"
+    localStorage.getItem("panier") || "[]"
 );
 
 // console.log (panierProduits);
@@ -67,7 +67,7 @@ function supprimerProduit() {
             let panierFiltre = panierProduits.filter(checkProduct);
 
             let formatTextProduitChoisi = JSON.stringify(panierFiltre);
-            localStorage.setItem("produitsChoisis", formatTextProduitChoisi);
+            localStorage.setItem("panier", formatTextProduitChoisi);
             document.getElementById("cart__items").innerHTML = "";
         
             panierProduits = panierFiltre;
@@ -97,11 +97,15 @@ function changerQte() {
             let newQuantity = inputQt[i].valueAsNumber;
             let idProduit = inputQt[i].id;
             let color = classColor[i].innerHTML;
-            console.log(panierProduits);
+            // console.log(panierProduits);
+            if (newQuantity == 0){
+                alert('La quantité ne peut être inférieur à 1');
+                return;
+            }
             panierProduits.forEach(function(comp){
                 if(comp.qte !== newQuantity && comp.id == idProduit && comp.color == color && newQuantity >= 0) {
                     comp.qte = newQuantity;
-                    localStorage.setItem("produitsChoisis", JSON.stringify(panierProduits));
+                    localStorage.setItem("panier", JSON.stringify(panierProduits));
                 }
                 // console.log(comp.qte);
             });
@@ -113,6 +117,8 @@ function changerQte() {
             }
             document.getElementById("totalPrice").innerText = formatMonetaire(prixTotal);
             document.getElementById("totalQuantity").innerText = qteTotale;
+
+            majSitckersPanier();
 
         });
     }
@@ -128,51 +134,52 @@ function formulaireValide() {
     const regexAddress = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/;
     const regexCity = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+    let errorMsg = null; 
     const prenom = document.getElementById("firstName").value;
     if (prenom === "") {
-        alert("Veuillez renseigner votre prénom");
-        return false;
+        errorMsg = ["firstNameErrorMsg", "Veuillez renseigner votre prénom"]; 
+        return errorMsg;
+
     }
     if (!regexName.test(prenom)) {
-        alert("veuillez introduire un prénom valide");
-        return false;
+        errorMsg = ["firstNameErrorMsg", "Veuillez renseigner un prénom valide"]; 
+        return errorMsg;
     }
     const nom = document.getElementById("lastName").value;
     if (nom === "") {
-        alert("Veuillez renseigner votre nom");
-        return false;
+        errorMsg = ["lastNameErrorMsg", "Veuillez renseigner votre nom"]; 
+        return errorMsg;
     }
     if (!regexName.test(nom)) {
-        alert("veuillez introduire un nom valide");
-        return false;
+        errorMsg = ["lastNameErrorMsg", "Veuillez renseigner un nom valide"]; 
+        return errorMsg;
     }
     const adresse = document.getElementById("address").value;
     if (adresse === ""){
-        alert("Veuillez renseigner une adresse");
-        return false;
+        errorMsg = ["addressErrorMsg", "Veuillez renseigner une adresse"]; 
+        return errorMsg;
     };
     if (!regexAddress.test(adresse)){
-        alert ("veuillez introduire une adresse valide");
-        return false;  
+        errorMsg = ["addressErrorMsg", "Veuillez renseigner une adresse valide"]; 
+        return errorMsg;
     }
     const ville = document.getElementById("city").value;
     if (ville === ""){
-        alert("Veuillez renseigner la ville");
-        return false;
+        errorMsg = ["cityErrorMsg", "Veuillez renseigner la ville"]; 
+        return errorMsg;
     };
     if (!regexCity.test(ville)){
-        alert ("veuillez introduire un nom de ville valide");
-        return false;  
+        errorMsg = ["cityErrorMsg", "Veuillez renseigner une ville valide"]; 
+        return errorMsg;
     }
     const email = document.getElementById("email").value;
     if (email === ""){
-        alert("Veuillez renseigner une adresse email");
-        return false;
+        errorMsg = ["emailErrorMsg", "Veuillez renseigner une adresse email"]; 
+        return errorMsg;
     };
     if (!regexEmail.test(email)){
-        alert ("veuillez introduire un email valide");
-        return false;  
+        errorMsg = ["emailErrorMsg", "Veuillez renseigner une adresse email valide"]; 
+        return errorMsg; 
     }
 }
 
@@ -180,11 +187,19 @@ function validerCommande() {
     if(panierProduits.length===0){  
         alert ("votre panier est vide");
         return;
+    } 
+    // afficher les messages d'erreur   
+    let errorMsg = formulaireValide();
+    if (errorMsg) {
+        let cart = document.querySelectorAll('.cart__order p');
+        cart.forEach(p => {
+            p.innerHTML ="";
+        });
+        document.getElementById(errorMsg[0]).innerHTML = errorMsg[1];
+        return; 
     }
     
-    if(formulaireValide()=== false){
-        return;
-    }
+
    
     const prenom = document.getElementById("firstName").value;
     const nom = document.getElementById("lastName").value;
@@ -216,16 +231,21 @@ function validerCommande() {
             console.log("response back end");
             console.log(response);
             if (response.ok == true) {
-                alert ("Votre Commande est reçu avec succès!");
-                //console.log(json);
+                //suppression du panier dans le local storage
+                // localStorage.removeItem("panier"); 
 
-                //vider le panier dans le localStorage
-                localStorage.removeItem("produitsChoisis"); 
-
-                response.json().then((informationsData) => {
-                    window.location.replace(`confirmation.html?ic=${informationsData.orderId}`);
-                });
-                return;
+                //ouvrir un modal de confirmation
+                let modal = document.getElementById("myModal");
+                let span = document.getElementsByClassName("close")[0];
+                modal.style.display = "block";
+                span.onclick = function() {
+                    response.json().then((informationsData) => {
+                        //redirection sur la page confirmation
+                        window.location.replace(`confirmation.html?ic=${informationsData.orderId}`); 
+                        return;
+                    })
+                }
+            
             } else {
                 console.log("Erreur!");
                 return;
@@ -234,6 +254,7 @@ function validerCommande() {
         .catch((error) => {
             console.log(error);
         });
+    
 }
 
 majSitckersPanier();
@@ -253,5 +274,4 @@ function majSitckersPanier(){
         stickersPanier.innerHTML = qtepanier;
     }
 }
-
 
