@@ -4,10 +4,10 @@ fetch(url)
     .then((response)=>response.json())
     .then(function(data) {
         let products = data;
-        console.log(products);
+        // console.log(products);
         
         products.forEach(product => {
-            console.log(product._id);
+            // console.log(product._id);
             document.getElementById('items').insertAdjacentHTML(
                 "beforeend",
                 `<a href="./product.html?id=${product._id}">

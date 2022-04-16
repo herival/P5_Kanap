@@ -62,7 +62,7 @@ function supprimerProduit() {
             let arrayProductDelete = productDelete.split("-");
             let productDeleteId = arrayProductDelete[0];
             let productDeleteColor = arrayProductDelete[1];
-            console.log(arrayProductDelete[0]);
+            // console.log(arrayProductDelete[0]);
 
             let panierFiltre = panierProduits.filter(checkProduct);
 
@@ -232,7 +232,7 @@ function validerCommande() {
             console.log(response);
             if (response.ok == true) {
                 //suppression du panier dans le local storage
-                // localStorage.removeItem("panier"); 
+                localStorage.removeItem("panier"); 
 
                 //ouvrir un modal de confirmation
                 let modal = document.getElementById("myModal");

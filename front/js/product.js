@@ -1,27 +1,27 @@
 
 //recupérer id d'un produit depuis l'url
 const textUrl = window.location.search;
-console.log(textUrl);
+// console.log(textUrl);
 const objetParamsUrl = new URLSearchParams(textUrl);
 const productId = objetParamsUrl.get("id");
-console.log(productId);
+// console.log(productId);
 const url = "http://localhost:3000/api/products/"+ productId; 
-console.log(url);
+// console.log(url);
 //requete http fetch id du produit
 
 fetch(url)
     .then((response)=>response.json())
     .then(function(data){
         let product = data;
-        console.log(product);
+        // console.log(product);
         document.getElementById("title").innerHTML = product.name;
         document.getElementById("description").innerHTML = product.description;
         document.getElementById("price").innerHTML = product.price;
         document.getElementById("product-img").innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
         document.getElementById('quantity').value = 1;
-        console.log(product.colors);
+        // console.log(product.colors);
         for(let color of product.colors){
-            console.log(color);
+            // console.log(color);
             document.getElementById("colors").insertAdjacentHTML(
                 "afterbegin",
                 `<option value="${color}">${color}</option>`
@@ -45,7 +45,7 @@ function addToCart() {
     const textUrl = window.location.search;
     const objetParamsUrl = new URLSearchParams(textUrl);
     const productId = objetParamsUrl.get("id");
-    console.log(productId);
+    // console.log(productId);
 
     const nomProduit = document.getElementById("title").textContent;
     const price = document.getElementById("price").textContent;
