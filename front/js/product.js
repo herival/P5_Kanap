@@ -13,7 +13,7 @@ fetch(url)
     .then((response)=>response.json())
     .then(function(data){
         let product = data;
-        // console.log(product);
+        console.log(product);
         document.getElementById("title").innerHTML = product.name;
         document.getElementById("description").innerHTML = product.description;
         document.getElementById("price").innerHTML = product.price;
@@ -26,8 +26,11 @@ fetch(url)
                 "afterbegin",
                 `<option value="${color}">${color}</option>`
             )
-        };
-
+        };    
+    })
+    // recuperer l'erreur (oubli dans le code source)
+    .catch(function(error){
+        console.log(error);
     });
 
 function formatMonetaire(prix){
@@ -69,7 +72,7 @@ function addToCart() {
             panier.push(produitChoisi);
         }
         else{produitExistant.qte=parseInt(produitExistant.qte)+parseInt(produitChoisi.qte);
-            let panierFiltre = paniefr.filter(produit=>(produit.id!=produitExistant.id && produit.color!=produitExistant.color));
+            let panierFiltre = panier.filter(produit=>(produit.id!=produitExistant.id && produit.color!=produitExistant.color));
             panierFiltre.push(produitExistant);
             panier=panierFiltre;
         }
