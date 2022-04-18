@@ -130,7 +130,7 @@ changerQte();
 
 // controle validation formulaire
 function formulaireValide() {
-    const regexName = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
+    const regexName = /^[a-zéç]+(\s[A-Z][a-zéç]+)*$/;
     const regexAddress = /^[A-Za-z0-9éç°',]+(\s[A-Za-z0-9éç°',]+)*$/;
     const regexCity = /^[A-Z][A-Za-zéç]+(\s[A-Z][A-Za-zéç]+)*$/;
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
